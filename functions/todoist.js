@@ -35,7 +35,6 @@ class TodoistController {
 
         return new Promise((res, rej) => {
             this.todoist.v1.task.find(taskID).then( task => {
-                console.info(task);
                 res(task);
             }).catch(error => {
                 console.warn(error);

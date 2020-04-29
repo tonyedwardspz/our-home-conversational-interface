@@ -7,7 +7,7 @@ const {WebhookClient} = require('dialogflow-fulfillment');
 const dailyTasks = require('./dailyTasks.js');
 
 // Deploy versioning
-const version = 0.15
+const version = 0.17
 console.info(`V${version} deploy datetime is ${new Date}`)
 
 process.env.DEBUG = 'dialogflow:debug';
@@ -33,6 +33,13 @@ exports.riverSide = functions.https.onRequest((request, response) => {
         agent.add(response);
     }
 
+    async function doDishes() {
+        console.info('Function call: doing dishes from riverSide function');
+        let response = await dailyTasks.doDishes();
+        console.info(response);
+        agent.add(response);
+    }
+
     async function emptyLitterTray() {
         console.info('Function call: emptying litter from riverSide function');
         let response = await dailyTasks.emptyLitterTray();
@@ -47,9 +54,30 @@ exports.riverSide = functions.https.onRequest((request, response) => {
         agent.add(response);
     }
 
+    async function takeOutRubbish(agent) {
+        console.info('Function call: take out rubbish from riverSide function');
+        let response = await dailyTasks.takeOutRubbish();
+        console.info(response);
+        agent.add(response);
+    }
+
+    async function takeOutRecycling(agent) {
+        console.info('Function call: take out recycling from riverSide function');
+        let response = await dailyTasks.takeOutRecycling();
+        console.info(response);
+        agent.add(response);
+    }
+
     async function makeBed() {
         console.info('Function call: making bed from riverSide function');
         let response = await dailyTasks.makeBed();
+        console.info(response);
+        agent.add(response);
+    }
+
+    async function waterHousePlants() {
+        console.info('Function call: watering plants from riverSide function');
+        let response = await dailyTasks.waterHousePlants();
         console.info(response);
         agent.add(response);
     }
@@ -63,8 +91,12 @@ exports.riverSide = functions.https.onRequest((request, response) => {
     intentMap.set('Default Welcome Intent', welcome);
     intentMap.set('Default Fallback Intent', fallback);
     intentMap.set('Feed Dexter', feedDexter);
+    intentMap.set('Do Dishes', doDishes);
     intentMap.set('Empty Litter Tray', emptyLitterTray);
     intentMap.set('Feed Birds', feedBirds);
+    intentMap.set('Take Out The Rubbish', takeOutRubbish);
+    intentMap.set('Take Out The Recycling', takeOutRecycling)
     intentMap.set('Make Bed', makeBed);
+    intentMap.set('Water House Plants', waterHousePlants);
     agent.handleRequest(intentMap);
 });

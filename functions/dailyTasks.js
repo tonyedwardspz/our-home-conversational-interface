@@ -20,7 +20,7 @@ class DailyTasksController {
     }
 
     async feedDexter() {
-        console.info(responses.feedDexter.info);
+        console.info('Feeding Dexter');
 
         return new Promise(async (res, rej) => {
             // get the two tasks.
@@ -67,11 +67,33 @@ class DailyTasksController {
     }
 
     async doDishes() {
-        return `I've noted that dishes have been done.`;
+        console.info('Doing the dishes');
+
+        return new Promise(async (res, rej) => {
+
+            try {
+                const dishesTask = await todoist.getTask(this.dishesID);
+                const dueDate = new Date(dishesTask.due.date)
+
+                if (dateHelper.isToday(dueDate) || dueDate  < new Date()) {
+                    console.info('The dishes need doing today');
+    
+                    await todoist.setTaskAsComplete(this.dishesID).then(() => {
+                        res(responses.doDishes.success);
+                    });
+                } else {
+                    res(responses.doDishes.notNeeded);
+                }
+            } catch(error){
+                rej(responses.doDishes.failure + ': ' + error).then( () => {
+                    return responses.doDishes.failure;
+                });
+            }
+        });
     }
 
     async emptyLitterTray() {
-        console.info(responses.emptyLitterTray.info);
+        console.info('Emptying the litter tray');
 
         return new Promise(async (res, rej) => {
 
@@ -96,7 +118,7 @@ class DailyTasksController {
     }
 
     async feedBirds() {
-        console.info(responses.feedBirds.info);
+        console.info('Feeding the birds');
 
         return new Promise(async (res, rej) => {
 
@@ -121,15 +143,57 @@ class DailyTasksController {
     }
 
     async takeOutRubbish() {
-        return `I've noted that the rubish has been taken out`;
+        console.info('Taking out the rubbish');
+
+        return new Promise(async (res, rej) => {
+
+            try {
+                const rubbishTask = await todoist.getTask(this.rubbishID);
+
+                if (dateHelper.isToday(new Date(rubbishTask.due.date))) {
+                    console.info('The rubbish needs taking out today');
+    
+                    await todoist.setTaskAsComplete(this.rubbishID).then(() => {
+                        res(responses.rubbish.success);
+                    });
+                } else {
+                    res(responses.rubbish.notNeeded);
+                }
+            } catch(error){
+                rej(responses.rubbish.failure + ': ' + error).then( () => {
+                    return responses.rubbish.failure;
+                });
+            }
+        });
     }
 
     async takeOutRecycling() {
-        return `I've noted that  the recycling has been taken out.`;
+        console.info('Taking out the recycling');
+
+        return new Promise(async (res, rej) => {
+
+            try {
+                const recyclingTask = await todoist.getTask(this.recyclingID);
+
+                if (dateHelper.isToday(new Date(recyclingTask.due.date))) {
+                    console.info('The recycling needs taking out today');
+    
+                    await todoist.setTaskAsComplete(this.recyclingID).then(() => {
+                        res(responses.recycling.success);
+                    });
+                } else {
+                    res(responses.recycling.notNeeded);
+                }
+            } catch(error){
+                rej(responses.recycling.failure + ': ' + error).then( () => {
+                    return responses.recycling.failure;
+                });
+            }
+        });
     }
 
     async makeBed() {
-        console.info(responses.makeBed.info);
+        console.info('Making the bed');
 
         return new Promise(async (res, rej) => {
 
@@ -154,7 +218,29 @@ class DailyTasksController {
     }
 
     async waterHousePlants() {
-        return `I've noted that house plants have been watered.`;
+        console.info('Watering the plants');
+
+        return new Promise(async (res, rej) => {
+
+            try {
+                const housePlantTask = await todoist.getTask(this.houseplantsID);
+                const dueDate = new Date(housePlantTask.due.date)
+
+                if (dateHelper.isToday(dueDate) || dueDate  < new Date()) {
+                    console.info('The house plants need watering today');
+    
+                    await todoist.setTaskAsComplete(this.houseplantsID).then(() => {
+                        res(responses.waterHousePlants.success);
+                    });
+                } else {
+                    res(responses.waterHousePlants.notNeeded);
+                }
+            } catch(error){
+                rej(responses.waterHousePlants.failure + ': ' + error).then( () => {
+                    return responses.waterHousePlants.failure;
+                });
+            }
+        });
     }
 }
 
