@@ -1,67 +1,82 @@
 'use strict';
 
 const todoist = require('./todoist.js');
+const dateHelper = require('./helpers/dates.js');
 
 class DailyTasksController {
-  constructor() {
-    console.info("Constructor: DailyTasksController instantaited");
+    constructor() {
+        console.info("Constructor: DailyTasksController instantaited");
 
-    this.dexterAM = 3390004422;
-    this.dexterPM = 3760124687;
-    this.dishes = 3441528837;
-    this.litterTray = 3413457465;
-    this.birds = 3386738503;
-    this.rubbish = 3386702538;
-    this.recycling = 3447640080;
-    this.bed = 3441526986;
-    this.houseplants = 3447632731;
-  }
+        this.feedDexterAMID = 3390004422;
+        this.feedDexterPMID = 3760124687;
+        this.dishesID = 3441528837;
+        this.litterTrayID = 3413457465;
+        this.birdsID = 3386738503;
+        this.rubbishID = 3386702538;
+        this.recyclingID = 3447640080;
+        this.bedID = 3441526986;
+        this.houseplantsID = 3447632731;
+    }
 
-  feedDexter() {
-    console.info('Feeding Dexter');
 
-    // get the two tasks
+    async feedDexter() {
+        console.info('Feeding Dexter');
 
-    // get current datetime
+        // get the two tasks
+        const amFeed = await todoist.getTask(this.feedDexterAMID);
+        const pmFeed = await todoist.getTask(this.feedDexterPMID);
 
-    // check that they're for today
+        // get all the dates
+        const now = new Date();
+        const amFeedDate = new Date(amFeed.due.datetime);
+        const pmFeedDate = new Date(pmFeed.due.datetime);
+        console.info('now: ' + now + '\nAM feed: ' + amFeedDate + '\nPM feed: ' + pmFeedDate);
 
-    // check whether its before or after 2pm
+        // check whether its before or after now and mark as done appropriatly
+        if (dateHelper.isToday(amFeedDate) && now > amFeedDate) {
+            console.log('AM feed is before now');
 
-    // mark the relevant task as done.
+            await todoist.setTaskAsComplete(this.feedDexterAMID).then(() => {
+                return `I've noted that Dexter has been fed this morning.`;
+            });
+            
+        } else if (dateHelper.isToday(pmFeedDate) && now > pmFeedDate) {
+            await todoist.setTaskAsComplete(this.feedDexterPMID).then(() => {
+                return `I've noted that Dexter has been fed this evening.`;
+            });
+        } else {
+            console.log('No feeding needed right now');
+            return `Dexter does not need to be fed right now.`;
+        }
+    }
 
-    todoist.setTaskAsComplete(this.dexterAM);
+    doDishes() {
+        return `I've noted that dishes have been done.`;
+    }
 
-    return `I've noted that Dexter has been fed.`;
-  }
+    enptyLitterTray() {
+        return `I've noted that the littler tray has been emptied.`;
+    }
 
-  doDishes() {
-    return `I've noted that dishes have been done.`;
-  }
+    feedBirds() {
+        return `I've noted that the birds has been fed.`;
+    }
 
-  enptyLitterTray() {
-    return `I've noted that the littler tray has been emptied.`;
-  }
+    takeOutRubbish() {
+        return `I've noted that the rubish has been taken out`;
+    }
 
-  feedBirds() {
-    return `I've noted that the birds has been fed.`;
-  }
+    takeOutRecycling() {
+        return `I've noted that  the recycling has been taken out.`;
+    }
 
-  takeOutRubbish() {
-    return `I've noted that the rubish has been taken out`;
-  }
+    makeBed() {
+        return `I've noted that the bed has been made.`;
+    }
 
-  takeOutRecycling() {
-    return `I've noted that  the recycling has been taken out.`;
-  }
-
-  makeBed() {
-    return `I've noted that the bed has been made.`;
-  }
-
-  waterHousePlants() {
-    return `I've noted that house plants have been watered.`;
-  }
+    waterHousePlants() {
+        return `I've noted that house plants have been watered.`;
+    }
 }
 
 module.exports = new DailyTasksController();

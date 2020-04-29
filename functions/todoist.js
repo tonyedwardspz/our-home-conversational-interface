@@ -11,43 +11,44 @@ class TodoistController {
         this.todoist = todoistAPI(this.todoistToken);
     }
 
-    getProjectTasks (projectID) {
+    async getProjectTasks (projectID) {
         console.info('Function Call: Get project tasks');
 
-        (async () => {
-            let tasks = await this.todoist.v1.task.findAll({project_id: projectID}).catch(error => {
+        return new Promise((res, rej) => {
+            this.todoist.v1.task.findAll({project_id: projectID}).then( tasks => {
+                res(tasks);
+            }).catch(error => {
                 console.warn(error);
+                rej(error);
             });
-        
-            console.info(tasks);
-            return tasks;
-        })();
+        });
     }
 
-    getTask(taskID) {
+   async getTask(taskID) {
         console.info('Function Call: Get task');
 
-        (async () => {
-            let task = await this.todoist.v1.task.find(taskID).catch(error => {
+        return new Promise((res, rej) => {
+            this.todoist.v1.task.find(taskID).then( task => {
+                console.info(task);
+                res(task);
+            }).catch(error => {
                 console.warn(error);
+                rej(error);
             });
-
-            console.info('Task Found: ', task);
-            return task;
-        })();
+        });
     }
 
-    setTaskAsComplete(taskID) {
+    async setTaskAsComplete(taskID) {
         console.info('Function Call: Set task as complete');
 
-        (async () => {
-            let task = await this.todoist.v1.task.close(taskID).catch(error => {
+        return new Promise((res, rej) => {
+            this.todoist.v1.task.close(taskID).then( closed => {
+                res(closed);
+            }).catch(error => {
                 console.warn(error);
+                rej(error);
             });
-
-            console.info('Task Closed: ', task);
-            return task;
-        })();
+        });
     }
 }
 
