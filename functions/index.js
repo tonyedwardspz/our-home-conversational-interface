@@ -26,14 +26,14 @@ exports.riverSide = functions.https.onRequest((request, response) => {
         agent.add(`You called?`);
     }
 
-    async function feedDexter(agent) {
+    async function feedDexter() {
         console.info('Function call: feed dexter from riverSide function');
         let response = await dailyTasks.feedDexter();
         console.info(response);
         agent.add(response);
     }
 
-    async function emptyLitterTray(agent) {
+    async function emptyLitterTray() {
         console.info('Function call: emptying litter from riverSide function');
         let response = await dailyTasks.emptyLitterTray();
         console.info(response);
@@ -47,7 +47,7 @@ exports.riverSide = functions.https.onRequest((request, response) => {
         agent.add(response);
     }
 
-    async function makeBed(agent) {
+    async function makeBed() {
         console.info('Function call: making bed from riverSide function');
         let response = await dailyTasks.makeBed();
         console.info(response);
