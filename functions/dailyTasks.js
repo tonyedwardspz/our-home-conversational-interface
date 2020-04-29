@@ -27,16 +27,13 @@ class DailyTasksController {
             let pmFeed;
             try {
                 amFeed = await todoist.getTask(this.feedDexterAMID).catch(error => {
-                    console.info('Error getting dexeter am feed task: ', error);
-                    rej('error getting am feed: ', error);
+                    rej('error getting am feed: ' + error);
                 });
                 pmFeed = await todoist.getTask(this.feedDexterPMID).catch(error => {
-                    console.info('Error getting dexeter pm feed task: ', error);
-                    rej('error getting am feed: ', error);
+                    rej('error getting pm feed: ' + error);
                 });
             } catch(err) {
-                console.warn('ERROR GETTING TASKS', err);
-                rej('error getting feed tasks: ', err);
+                rej('error getting feed dexter tasks: ' + err);
             }
 
             // get all the dates
@@ -50,16 +47,13 @@ class DailyTasksController {
                 console.info('AM feed is before now');
 
                 await todoist.setTaskAsComplete(this.feedDexterAMID).then(() => {
-                    console.info(`I've noted that Dexter has been fed this morning.`);
                     res(`I've noted that Dexter has been fed this morning.`);
                 });
             } else if (dateHelper.isToday(pmFeedDate) && now > pmFeedDate) {
                 await todoist.setTaskAsComplete(this.feedDexterPMID).then(() => {
-                    console.info(`I've noted that Dexter has been fed this evening.`);
                     res(`I've noted that Dexter has been fed this evening.`);
                 });
             } else {
-                console.info('No feeding needed right now');
                 res(`Dexter does not need to be fed right now.`);
             }
         });
@@ -81,16 +75,13 @@ class DailyTasksController {
                     console.info('Litter tray needs emptying today');
     
                     await todoist.setTaskAsComplete(this.litterTrayID).then(() => {
-                        console.info('Litter tray has been emptied');
                         res(`I've noted that the litter tray has been emptied.`);
                     });
                 } else {
-                    console.info('Litter tray does not need emptying right now');
                     res(`The litter tray does not need emptying right now.`);
                 }
             } catch(error){
-                console.warn('ERROR emptying litter tray: ', error);
-                rej('ERROR emptying litter tray');
+                rej('ERROR emptying litter tray ' + error);
             }
         });
     }
@@ -107,15 +98,12 @@ class DailyTasksController {
                     console.info('The birds need feeding today');
     
                     await todoist.setTaskAsComplete(this.birdsID).then(() => {
-                        console.info('Birds have been fed');
                         res(`I've noted that the birds have been fed.`);
                     });
                 } else {
-                    console.info('The birds do not need feeding right now');
                     res(`The birds do not need feeding right now.`);
                 }
             } catch(error){
-                console.warn('ERROR feeding birds: ', error);
                 rej('ERROR feeding birds');
             }
         });
@@ -141,15 +129,12 @@ class DailyTasksController {
                     console.info('The bed still needs making today');
     
                     await todoist.setTaskAsComplete(this.bedID).then(() => {
-                        console.info('The bed has been fed');
                         res(`I've noted that the bed has been made.`);
                     });
                 } else {
-                    console.info(`The bed dosen't need making`);
                     res(`The bed dosen't need making right now.`);
                 }
             } catch(error){
-                console.warn('ERROR making bed: ', error);
                 rej('ERROR making the bed');
             }
         });

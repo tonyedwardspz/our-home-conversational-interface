@@ -29,24 +29,28 @@ exports.riverSide = functions.https.onRequest((request, response) => {
     async function feedDexter(agent) {
         console.info('Function call: feed dexter from riverSide function');
         let response = await dailyTasks.feedDexter();
+        console.info(response);
         agent.add(response);
     }
 
     async function emptyLitterTray(agent) {
         console.info('Function call: emptying litter from riverSide function');
         let response = await dailyTasks.emptyLitterTray();
+        console.info(response);
         agent.add(response);
     }
 
     async function feedBirds(agent) {
         console.info('Function call: feeding birds from riverSide function');
         let response = await dailyTasks.feedBirds();
+        console.info(response);
         agent.add(response);
     }
 
     async function makeBed(agent) {
         console.info('Function call: making bed from riverSide function');
         let response = await dailyTasks.makeBed();
+        console.info(response);
         agent.add(response);
     }
 
