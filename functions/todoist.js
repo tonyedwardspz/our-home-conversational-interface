@@ -8,11 +8,12 @@ class TodoistController {
         console.info('Constructor: TodistController instantaited');
 
         this.todoistToken = functions.config().todoist.id ? functions.config().todoist.id : process.env.TODOIST_TOKEN;
-        this.todoist = todoistAPI(this.todoistToken);
+        
     }
 
     async getProjectTasks (projectID) {
         console.info('Function Call: Get project tasks');
+        this.todoist = todoistAPI(this.todoistToken);
 
         try {
             return new Promise((res, rej) => {
@@ -24,12 +25,13 @@ class TodoistController {
                 });
             });
         } catch(err){
-            console.warn('ERROR IN GET GAST FUNCTION: ', err);
+            console.warn('ERROR IN GET TASK FUNCTION: ', err);
         }
     }
 
    async getTask(taskID) {
         console.info('Function Call: Get task');
+        this.todoist = todoistAPI(this.todoistToken);
 
         return new Promise((res, rej) => {
             this.todoist.v1.task.find(taskID).then( task => {
@@ -44,6 +46,7 @@ class TodoistController {
 
     async setTaskAsComplete(taskID) {
         console.info('Function Call: Set task as complete');
+        this.todoist = todoistAPI(this.todoistToken);
 
         return new Promise((res, rej) => {
             this.todoist.v1.task.close(taskID).then( closed => {
