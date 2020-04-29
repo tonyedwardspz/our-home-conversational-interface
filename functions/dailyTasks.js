@@ -2,6 +2,7 @@
 
 const todoist = require('./todoist.js');
 const dateHelper = require('./helpers/dates.js');
+const responses = require('./responses/dailyTasks.js');
 
 class DailyTasksController {
     constructor() {
@@ -19,7 +20,7 @@ class DailyTasksController {
     }
 
     async feedDexter() {
-        console.info('Feeding Dexter');
+        console.info(responses.feedDexter.info);
 
         return new Promise(async (res, rej) => {
             // get the two tasks.
@@ -27,13 +28,19 @@ class DailyTasksController {
             let pmFeed;
             try {
                 amFeed = await todoist.getTask(this.feedDexterAMID).catch(error => {
-                    rej('error getting am feed: ' + error);
+                    rej(responses.feedDexter.failureAM + ': ' + error).then( () => {
+                        return responses.feedDexter.failureAM;
+                    });
                 });
                 pmFeed = await todoist.getTask(this.feedDexterPMID).catch(error => {
-                    rej('error getting pm feed: ' + error);
+                    rej(responses.feedDexter.failurePM + ': ' + error).then( () => {
+                        return responses.feedDexter.failurePM;
+                    });
                 });
             } catch(err) {
-                rej('error getting feed dexter tasks: ' + err);
+                rej(responses.feedDexter.failureGeneral + ': ' + err).then( () => {
+                    return responses.feedDexter.failureGeneral;
+                });
             }
 
             // get all the dates
@@ -44,17 +51,17 @@ class DailyTasksController {
 
             // check whether its before or after now and mark as done appropriatly
             if (dateHelper.isToday(amFeedDate) && now > amFeedDate) {
-                console.info('AM feed is before now');
-
+                console.info('Dexter needs feeding this morning');
                 await todoist.setTaskAsComplete(this.feedDexterAMID).then(() => {
-                    res(`I've noted that Dexter has been fed this morning.`);
+                    res(responses.feedDexter.successMorning);
                 });
             } else if (dateHelper.isToday(pmFeedDate) && now > pmFeedDate) {
+                console.info('Dexter needs feeding this evening');
                 await todoist.setTaskAsComplete(this.feedDexterPMID).then(() => {
-                    res(`I've noted that Dexter has been fed this evening.`);
+                    res(responses.feedDexter.successEvening);
                 });
             } else {
-                res(`Dexter does not need to be fed right now.`);
+                res(responses.feedDexter.notNeeded);
             }
         });
     }
@@ -63,8 +70,8 @@ class DailyTasksController {
         return `I've noted that dishes have been done.`;
     }
 
-    async enptyLitterTray() {
-        console.info('Emptying the litter tray');
+    async emptyLitterTray() {
+        console.info(responses.emptyLitterTray.info);
 
         return new Promise(async (res, rej) => {
 
@@ -75,19 +82,21 @@ class DailyTasksController {
                     console.info('Litter tray needs emptying today');
     
                     await todoist.setTaskAsComplete(this.litterTrayID).then(() => {
-                        res(`I've noted that the litter tray has been emptied.`);
+                        res(responses.emptyLitterTray.success);
                     });
                 } else {
-                    res(`The litter tray does not need emptying right now.`);
+                    res(responses.emptyLitterTray.notNeeded);
                 }
             } catch(error){
-                rej('ERROR emptying litter tray ' + error);
+                rej(responses.emptyLitterTray.failure + ': ' + error).then( () => {
+                    return responses.emptyLitterTray.failure;
+                });
             }
         });
     }
 
     async feedBirds() {
-        console.info('Feeding the birds');
+        console.info(responses.feedBirds.info);
 
         return new Promise(async (res, rej) => {
 
@@ -98,13 +107,15 @@ class DailyTasksController {
                     console.info('The birds need feeding today');
     
                     await todoist.setTaskAsComplete(this.birdsID).then(() => {
-                        res(`I've noted that the birds have been fed.`);
+                        res(responses.feedBirds.success);
                     });
                 } else {
-                    res(`The birds do not need feeding right now.`);
+                    res(responses.feedBirds.notNeeded);
                 }
             } catch(error){
-                rej('ERROR feeding birds');
+                rej(responses.feedBirds.failure + ': ' + error).then( () => {
+                    return responses.feedBirds.failure;
+                });
             }
         });
     }
@@ -118,7 +129,7 @@ class DailyTasksController {
     }
 
     async makeBed() {
-        console.info('Making the bed');
+        console.info(responses.makeBed.info);
 
         return new Promise(async (res, rej) => {
 
@@ -129,13 +140,15 @@ class DailyTasksController {
                     console.info('The bed still needs making today');
     
                     await todoist.setTaskAsComplete(this.bedID).then(() => {
-                        res(`I've noted that the bed has been made.`);
+                        res(responses.makeBed.success);
                     });
                 } else {
-                    res(`The bed dosen't need making right now.`);
+                    res(responses.makeBed.notNeeded);
                 }
             } catch(error){
-                rej('ERROR making the bed');
+                rej(responses.makeBed.failure + ': ' + error).then( () => {
+                    return responses.makeBed.failure;
+                });
             }
         });
     }
