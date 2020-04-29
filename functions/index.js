@@ -6,6 +6,7 @@ const functions = require('firebase-functions');
 const {WebhookClient} = require('dialogflow-fulfillment');
 const dailyTasks = require('./dailyTasks.js');
 const habits = require('./habits.js');
+const regularTasks = require('./regularTasks.js');
 
 // Deploy versioning
 const version = 0.19
@@ -113,6 +114,34 @@ exports.riverSide = functions.https.onRequest((request, response) => {
         agent.add(response);
     }
 
+    async function foodWaste() {
+        console.info('Function call: Food Waste from riverSide function');
+        let response = await regularTasks.foodWaste();
+        console.info(response);
+        agent.add(response);
+    }
+
+    async function dampTraps() {
+        console.info('Function call: Damp Traps from riverSide function');
+        let response = await regularTasks.dampTraps();
+        console.info(response);
+        agent.add(response);
+    }
+
+    async function greenHouse() {
+        console.info('Function call: Green house from riverSide function');
+        let response = await regularTasks.greenHouse();
+        console.info(response);
+        agent.add(response);
+    }
+
+    async function meterReadings() {
+        console.info('Function call: Meter readings from riverSide function');
+        let response = await regularTasks.meterReadings();
+        console.info(response);
+        agent.add(response);
+    }
+
     function fallback(agent) {
         agent.add(`I didn't understand`);
         agent.add(`I'm sorry, can you try again?`);
@@ -137,6 +166,12 @@ exports.riverSide = functions.https.onRequest((request, response) => {
     intentMap.set('Learn German', learnGerman);
     intentMap.set('Clothes Ready', clothesReady);
     intentMap.set('One Page Of A Book', onePageOfABook)
+
+    // Regular Tasks
+    intentMap.set('Food Waste', foodWaste);    
+    intentMap.set('Damp Traps', dampTraps);
+    intentMap.set('Green House', greenHouse);
+    intentMap.set('Meter Readings', meterReadings);  
 
     agent.handleRequest(intentMap);
 });
