@@ -6,7 +6,19 @@ const functions = require('firebase-functions');
 const {WebhookClient} = require('dialogflow-fulfillment');
 const dailyTasks = require('./dailyTasks.js');
 
+// Deploy versioning
+const version = 0.1
+console.info(`V${version} deploy datetime is ${new Date}`)
+
 process.env.DEBUG = 'dialogflow:debug';
+
+
+
+let task = dailyTasks.feedDexter();
+// console.log(task.due);
+
+
+
 
 exports.riverSide = functions.https.onRequest((request, response) => {
     console.warn("Riverside function hit");
@@ -15,6 +27,7 @@ exports.riverSide = functions.https.onRequest((request, response) => {
     console.log('Dialogflow Request body: ' + JSON.stringify(request.body));
 
     function welcome (agent) {
+        agent.add(`Version ${version}`);
         agent.add(`You called?`);
     }
 
