@@ -13,7 +13,10 @@ class BaseTaskController {
 
             try {
                 const task = await todoist.getTask(id).catch(error => {
-                    console.warn(error);
+                    rej(responses.responses.failure + ': ' + error).then(() => {
+                        console.warn(responses.failure);
+                        return responses.failure;
+                    });
                 });
 
                 const dueDate = new Date(task.due.date)
