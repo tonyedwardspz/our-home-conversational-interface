@@ -25,9 +25,17 @@ exports.riverSide = functions.https.onRequest((request, response) => {
         agent.add(`You called?`);
     }
 
-    function feedDexter(agent) {
-        console.log('Function call: feed dexter from riverSide function');
-        let response = dailyTasks.feedDexter();
+    async function feedDexter(agent) {
+        console.info('Function call: feed dexter from riverSide function');
+        let response = await dailyTasks.feedDexter();
+        agent.add(response);
+    }
+
+    async function emptyLitterTray(agent) {
+        console.info('Function call: emptying litter from riverSide function');
+        let response = await dailyTasks.emptyLitterTray();
+        agent.add(response);
+    }
         agent.add(response);
     }
 

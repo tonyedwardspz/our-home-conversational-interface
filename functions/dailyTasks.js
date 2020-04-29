@@ -22,42 +22,48 @@ class DailyTasksController {
         console.info('Feeding Dexter');
 
         // get the two tasks.
-        let amFeed;
-        let pmFeed;
-        try {
-            amFeed = await todoist.getTask(this.feedDexterAMID).catch(error => {
-                console.info('Error getting dexeter am feed task: ', error);
-            });
-            pmFeed = await todoist.getTask(this.feedDexterPMID).catch(error => {
-                console.info('Error getting dexeter pm feed task: ', error);
-            });
-        } catch(err) {
-            console.warn('ERROR GETTING TASKS', err);
-        }
+        return new Promise(async (res, rej) => {
+            // get the two tasks.
+            let amFeed;
+            let pmFeed;
+            try {
+                amFeed = await todoist.getTask(this.feedDexterAMID).catch(error => {
+                    console.info('Error getting dexeter am feed task: ', error);
+                    rej('error getting am feed: ', error);
+                });
+                pmFeed = await todoist.getTask(this.feedDexterPMID).catch(error => {
+                    console.info('Error getting dexeter pm feed task: ', error);
+                    rej('error getting am feed: ', error);
+                });
+            } catch(err) {
+                console.warn('ERROR GETTING TASKS', err);
+                rej('error getting feed tasks: ', err);
+            }
 
-        // get all the dates
-        const now = new Date();
-        const amFeedDate = new Date(amFeed.due.datetime);
-        const pmFeedDate = new Date(pmFeed.due.datetime);
-        console.info('now: ' + now + '\nAM feed: ' + amFeedDate + '\nPM feed: ' + pmFeedDate);
+            // get all the dates
+            const now = new Date();
+            const amFeedDate = new Date(amFeed.due.datetime);
+            const pmFeedDate = new Date(pmFeed.due.datetime);
+            console.info('now: ' + now + '\nAM feed: ' + amFeedDate + '\nPM feed: ' + pmFeedDate);
 
-        // check whether its before or after now and mark as done appropriatly
-        if (dateHelper.isToday(amFeedDate) && now > amFeedDate) {
-            console.info('AM feed is before now');
+            // check whether its before or after now and mark as done appropriatly
+            if (dateHelper.isToday(amFeedDate) && now > amFeedDate) {
+                console.info('AM feed is before now');
 
-            await todoist.setTaskAsComplete(this.feedDexterAMID).then(() => {
-                console.info(`I've noted that Dexter has been fed this morning.`);
-                return `I've noted that Dexter has been fed this morning.`;
-            });
-        } else if (dateHelper.isToday(pmFeedDate) && now > pmFeedDate) {
-            await todoist.setTaskAsComplete(this.feedDexterPMID).then(() => {
-                console.info(`I've noted that Dexter has been fed this evening.`);
-                return `I've noted that Dexter has been fed this evening.`;
-            });
-        } else {
-            console.info('No feeding needed right now');
-            return `Dexter does not need to be fed right now.`;
-        }
+                await todoist.setTaskAsComplete(this.feedDexterAMID).then(() => {
+                    console.info(`I've noted that Dexter has been fed this morning.`);
+                    res(`I've noted that Dexter has been fed this morning.`);
+                });
+            } else if (dateHelper.isToday(pmFeedDate) && now > pmFeedDate) {
+                await todoist.setTaskAsComplete(this.feedDexterPMID).then(() => {
+                    console.info(`I've noted that Dexter has been fed this evening.`);
+                    res(`I've noted that Dexter has been fed this evening.`);
+                });
+            } else {
+                console.info('No feeding needed right now');
+                res(`Dexter does not need to be fed right now.`);
+            }
+        });
     }
 
     async doDishes() {
@@ -67,23 +73,27 @@ class DailyTasksController {
     async enptyLitterTray() {
         console.info('Emptying the litter tray');
 
-        const litterTrayTask = await todoist.getTask(this.litterTrayID);
+        return new Promise(async (res, rej) => {
 
-        const now = new Date();
-        const litterTrayDate = new Date(litterTrayTask.due.date);
+            try {
+                const litterTrayTask = await todoist.getTask(this.litterTrayID);
 
-        // check whether its before or after now and mark as done appropriatly
-        if (dateHelper.isToday(litterTrayDate)) {
-            console.info('Litter tray needs emptying today');
-
-            await todoist.setTaskAsComplete(this.litterTrayID).then(() => {
-                console.info('Litter tray has been emptied');
-                return `I've noted that the littler tray has been emptied.`;
-            });
-        } else {
-            console.info('Litter tray does not need emptying right now');
-            return `The litter tray does not need emptying right now.`;
-        }
+                if (dateHelper.isToday(new Date(litterTrayTask.due.date))) {
+                    console.info('Litter tray needs emptying today');
+    
+                    await todoist.setTaskAsComplete(this.litterTrayID).then(() => {
+                        console.info('Litter tray has been emptied');
+                        res(`I've noted that the litter tray has been emptied.`);
+                    });
+                } else {
+                    console.info('Litter tray does not need emptying right now');
+                    res(`The litter tray does not need emptying right now.`);
+                }
+            } catch(error){
+                console.warn('ERROR emptying litter tray: ', error);
+                rej('ERROR emptying litter tray');
+            }
+        });
     }
 
     async feedBirds() {
