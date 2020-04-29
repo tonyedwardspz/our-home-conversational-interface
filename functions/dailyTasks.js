@@ -71,84 +71,37 @@ class DailyTasksController extends BaseTaskController {
 
     async doDishes() {
         console.info('Doing the dishes');
-
-        return new Promise(async (res, rej) => {
-
-            try {
-                const dishesTask = await todoist.getTask(this.dishesID);
-                const dueDate = new Date(dishesTask.due.date)
-
-                if (dateHelper.isToday(dueDate) || dueDate  < new Date()) {
-                    console.info('The dishes need doing today');
-    
-                    await todoist.setTaskAsComplete(this.dishesID).then(() => {
-                        res(responses.doDishes.success);
-                    });
-                } else {
-                    res(responses.doDishes.notNeeded);
-                }
-            } catch(error){
-                rej(responses.doDishes.failure + ': ' + error).then( () => {
-                    return responses.doDishes.failure;
-                });
-            }
-        });
+        return super.isTaskTodayOrBefore(this.dishesID, responses.doDishes, 'The dishes need doing today');
     }
 
     async emptyLitterTray() {
         console.info('Emptying the litter tray');
-
-        return super.isTodayTask(this.litterTrayID, responses.emptyLitterTray, 'Litter tray needs emptying today');
+        return super.isTaskTodayOrBefore(this.litterTrayID, responses.emptyLitterTray, 'Litter tray needs emptying today');
     }
 
     async feedBirds() {
         console.info('Feeding the birds');
-
-        return super.isTodayTask(this.birdsID, responses.feedBirds, 'The birds need feeding today');
+        return super.isTaskTodayOrBefore(this.birdsID, responses.feedBirds, 'The birds need feeding today');
     }
 
     async takeOutRubbish() {
         console.info('Taking out the rubbish');
-
-        return super.isTodayTask(this.rubbishID, responses.rubbish, 'The rubbish needs taking out today');
+        return super.isTaskTodayOrBefore(this.rubbishID, responses.rubbish, 'The rubbish needs taking out today');
     }
 
     async takeOutRecycling() {
         console.info('Taking out the recycling');
-
-        return super.isTodayTask(this.recyclingID, responses.recycling, 'The recycling needs taking out today');
+        return super.isTaskTodayOrBefore(this.recyclingID, responses.recycling, 'The recycling needs taking out today');
     }
 
     async makeBed() {
         console.info('Making the bed');
-
-        return super.isTodayTask(this.bedIS, responses.makeBed, 'The bed still needs making today');
+        return super.isTaskTodayOrBefore(this.bedIS, responses.makeBed, 'The bed still needs making today');
     }
 
     async waterHousePlants() {
         console.info('Watering the plants');
-
-        return new Promise(async (res, rej) => {
-
-            try {
-                const housePlantTask = await todoist.getTask(this.houseplantsID);
-                const dueDate = new Date(housePlantTask.due.date)
-
-                if (dateHelper.isToday(dueDate) || dueDate  < new Date()) {
-                    console.info('The house plants need watering today');
-    
-                    await todoist.setTaskAsComplete(this.houseplantsID).then(() => {
-                        res(responses.waterHousePlants.success);
-                    });
-                } else {
-                    res(responses.waterHousePlants.notNeeded);
-                }
-            } catch(error){
-                rej(responses.waterHousePlants.failure + ': ' + error).then( () => {
-                    return responses.waterHousePlants.failure;
-                });
-            }
-        });
+        return super.isTaskTodayOrBefore(this.houseplantsID, responses.waterHousePlants, 'The house plants need watering today');
     }
 }
 
