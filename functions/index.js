@@ -7,7 +7,7 @@ const {WebhookClient} = require('dialogflow-fulfillment');
 const dailyTasks = require('./dailyTasks.js');
 
 // Deploy versioning
-const version = 0.13
+const version = 0.15
 console.info(`V${version} deploy datetime is ${new Date}`)
 
 process.env.DEBUG = 'dialogflow:debug';
@@ -15,13 +15,14 @@ process.env.DEBUG = 'dialogflow:debug';
 //let task = dailyTasks.feedDexter(); // Testing function call
 
 exports.riverSide = functions.https.onRequest((request, response) => {
-    console.warn("Riverside function hit");
+    console.info("Riverside function hit");
+    console.info('Dialogflow Request headers: ' + JSON.stringify(request.headers));
+    console.info('Dialogflow Request body: ' + JSON.stringify(request.body));
+
     const agent = new WebhookClient({ request, response });
-    console.log('Dialogflow Request headers: ' + JSON.stringify(request.headers));
-    console.log('Dialogflow Request body: ' + JSON.stringify(request.body));
 
     function welcome(agent) {
-        agent.add(`V ${version}`);
+        // agent.add(`V ${version}`);
         agent.add(`You called?`);
     }
 
@@ -36,12 +37,16 @@ exports.riverSide = functions.https.onRequest((request, response) => {
         let response = await dailyTasks.emptyLitterTray();
         agent.add(response);
     }
+
+    async function feedBirds(agent) {
+        console.info('Function call: feeding birds from riverSide function');
+        let response = await dailyTasks.feedBirds();
         agent.add(response);
     }
 
-    function emptyLitterTray(agent) {
-        console.log('Function call: feed dexter from riverSide function');
-        let response = dailyTasks.emptyLitterTray();
+    async function makeBed(agent) {
+        console.info('Function call: making bed from riverSide function');
+        let response = await dailyTasks.makeBed();
         agent.add(response);
     }
 
@@ -55,5 +60,7 @@ exports.riverSide = functions.https.onRequest((request, response) => {
     intentMap.set('Default Fallback Intent', fallback);
     intentMap.set('Feed Dexter', feedDexter);
     intentMap.set('Empty Litter Tray', emptyLitterTray);
+    intentMap.set('Feed Birds', feedBirds);
+    intentMap.set('Make Bed', makeBed);
     agent.handleRequest(intentMap);
 });

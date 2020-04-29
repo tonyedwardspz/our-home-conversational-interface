@@ -21,7 +21,6 @@ class DailyTasksController {
     async feedDexter() {
         console.info('Feeding Dexter');
 
-        // get the two tasks.
         return new Promise(async (res, rej) => {
             // get the two tasks.
             let amFeed;
@@ -97,7 +96,29 @@ class DailyTasksController {
     }
 
     async feedBirds() {
-        return `I've noted that the birds has been fed.`;
+        console.info('Feeding the birds');
+
+        return new Promise(async (res, rej) => {
+
+            try {
+                const feedBirdsTask = await todoist.getTask(this.birdsID);
+
+                if (dateHelper.isToday(new Date(feedBirdsTask.due.date))) {
+                    console.info('The birds need feeding today');
+    
+                    await todoist.setTaskAsComplete(this.birdsID).then(() => {
+                        console.info('Birds have been fed');
+                        res(`I've noted that the birds have been fed.`);
+                    });
+                } else {
+                    console.info('The birds do not need feeding right now');
+                    res(`The birds do not need feeding right now.`);
+                }
+            } catch(error){
+                console.warn('ERROR feeding birds: ', error);
+                rej('ERROR feeding birds');
+            }
+        });
     }
 
     async takeOutRubbish() {
@@ -109,7 +130,29 @@ class DailyTasksController {
     }
 
     async makeBed() {
-        return `I've noted that the bed has been made.`;
+        console.info('Making the bed');
+
+        return new Promise(async (res, rej) => {
+
+            try {
+                const makeBedTask = await todoist.getTask(this.bedID);
+
+                if (dateHelper.isToday(new Date(makeBedTask.due.date))) {
+                    console.info('The bed still needs making today');
+    
+                    await todoist.setTaskAsComplete(this.bedID).then(() => {
+                        console.info('The bed has been fed');
+                        res(`I've noted that the bed has been made.`);
+                    });
+                } else {
+                    console.info(`The bed dosen't need making`);
+                    res(`The bed dosen't need making right now.`);
+                }
+            } catch(error){
+                console.warn('ERROR making bed: ', error);
+                rej('ERROR making the bed');
+            }
+        });
     }
 
     async waterHousePlants() {
