@@ -5,11 +5,10 @@ const BaseTaskController = require('./baseTaskController.js');
 
 class HabitsController extends BaseTaskController {
     constructor() {
-        console.info("Constructor: HabitsController instantaited");
 
         super('Habits controller');
 
-        this.stocicID = 3464014966;
+        this.stoicID = 3464014966;
         this.clothesID = 3447677463;
         this.germanID = 3414504075;
         this.bookID = 3414648271;
@@ -17,7 +16,7 @@ class HabitsController extends BaseTaskController {
 
     async somethingStoic(){
         console.info('Consume something stoic');
-        return super.isTaskTodayOrBefore(this.stocicID, responses.stoic);
+        return super.isTaskTodayOrBefore(this.stoicID, responses.stoic);
     }
 
     async learnGerman(){

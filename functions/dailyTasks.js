@@ -7,8 +7,6 @@ const BaseTaskController = require('./baseTaskController.js');
 
 class DailyTasksController extends BaseTaskController {
     constructor() {
-        console.info("Constructor: DailyTasksController instantaited");
-
         super('DailyTasks Controller');
 
         this.feedDexterAMID = 3390004422;
