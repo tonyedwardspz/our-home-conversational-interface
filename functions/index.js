@@ -13,7 +13,9 @@ console.info(`V${version} deploy datetime is ${new Date}`)
 
 process.env.DEBUG = 'dialogflow:debug';
 
+// Testing function calls
 //let task = dailyTasks.feedDexter(); // Testing function call
+//let task = habits.somethingStoic();
 
 exports.riverSide = functions.https.onRequest((request, response) => {
     console.info("Riverside function hit");
