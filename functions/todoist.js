@@ -14,14 +14,18 @@ class TodoistController {
     async getProjectTasks (projectID) {
         console.info('Function Call: Get project tasks');
 
-        return new Promise((res, rej) => {
-            this.todoist.v1.task.findAll({project_id: projectID}).then( tasks => {
-                res(tasks);
-            }).catch(error => {
-                console.warn(error);
-                rej(error);
+        try {
+            return new Promise((res, rej) => {
+                this.todoist.v1.task.findAll({project_id: projectID}).then( tasks => {
+                    res(tasks);
+                }).catch(error => {
+                    console.warn(error);
+                    rej(error);
+                });
             });
-        });
+        } catch(err){
+            console.warn('ERROR IN GET GAST FUNCTION: ', err);
+        }
     }
 
    async getTask(taskID) {

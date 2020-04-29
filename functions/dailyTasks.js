@@ -18,13 +18,22 @@ class DailyTasksController {
         this.houseplantsID = 3447632731;
     }
 
-
     async feedDexter() {
         console.info('Feeding Dexter');
 
-        // get the two tasks
-        const amFeed = await todoist.getTask(this.feedDexterAMID);
-        const pmFeed = await todoist.getTask(this.feedDexterPMID);
+        // get the two tasks.
+        let amFeed;
+        let pmFeed;
+        try {
+            amFeed = await todoist.getTask(this.feedDexterAMID).catch(error => {
+                console.info('Error getting dexeter am feed task: ', error);
+            });
+            pmFeed = await todoist.getTask(this.feedDexterPMID).catch(error => {
+                console.info('Error getting dexeter pm feed task: ', error);
+            });
+        } catch(err) {
+            console.warn('ERROR GETTING TASKS', err);
+        }
 
         // get all the dates
         const now = new Date();
@@ -34,18 +43,19 @@ class DailyTasksController {
 
         // check whether its before or after now and mark as done appropriatly
         if (dateHelper.isToday(amFeedDate) && now > amFeedDate) {
-            console.log('AM feed is before now');
+            console.info('AM feed is before now');
 
             await todoist.setTaskAsComplete(this.feedDexterAMID).then(() => {
+                console.info(`I've noted that Dexter has been fed this morning.`);
                 return `I've noted that Dexter has been fed this morning.`;
             });
-            
         } else if (dateHelper.isToday(pmFeedDate) && now > pmFeedDate) {
             await todoist.setTaskAsComplete(this.feedDexterPMID).then(() => {
+                console.info(`I've noted that Dexter has been fed this evening.`);
                 return `I've noted that Dexter has been fed this evening.`;
             });
         } else {
-            console.log('No feeding needed right now');
+            console.info('No feeding needed right now');
             return `Dexter does not need to be fed right now.`;
         }
     }
@@ -54,7 +64,6 @@ class DailyTasksController {
         return `I've noted that dishes have been done.`;
     }
 
-    enptyLitterTray() {
     async enptyLitterTray() {
         console.info('Emptying the litter tray');
 
@@ -77,22 +86,23 @@ class DailyTasksController {
         }
     }
 
+    async feedBirds() {
         return `I've noted that the birds has been fed.`;
     }
 
-    takeOutRubbish() {
+    async takeOutRubbish() {
         return `I've noted that the rubish has been taken out`;
     }
 
-    takeOutRecycling() {
+    async takeOutRecycling() {
         return `I've noted that  the recycling has been taken out.`;
     }
 
-    makeBed() {
+    async makeBed() {
         return `I've noted that the bed has been made.`;
     }
 
-    waterHousePlants() {
+    async waterHousePlants() {
         return `I've noted that house plants have been watered.`;
     }
 }

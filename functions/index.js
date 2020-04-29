@@ -7,18 +7,12 @@ const {WebhookClient} = require('dialogflow-fulfillment');
 const dailyTasks = require('./dailyTasks.js');
 
 // Deploy versioning
-const version = 0.1
+const version = 0.13
 console.info(`V${version} deploy datetime is ${new Date}`)
 
 process.env.DEBUG = 'dialogflow:debug';
 
-
-
-let task = dailyTasks.feedDexter();
-// console.log(task.due);
-
-
-
+//let task = dailyTasks.feedDexter(); // Testing function call
 
 exports.riverSide = functions.https.onRequest((request, response) => {
     console.warn("Riverside function hit");
@@ -26,18 +20,24 @@ exports.riverSide = functions.https.onRequest((request, response) => {
     console.log('Dialogflow Request headers: ' + JSON.stringify(request.headers));
     console.log('Dialogflow Request body: ' + JSON.stringify(request.body));
 
-    function welcome (agent) {
-        agent.add(`Version ${version}`);
+    function welcome(agent) {
+        agent.add(`V ${version}`);
         agent.add(`You called?`);
     }
 
-    function feedDexter (agent) {
+    function feedDexter(agent) {
         console.log('Function call: feed dexter from riverSide function');
         let response = dailyTasks.feedDexter();
         agent.add(response);
     }
 
-    function fallback (agent) {
+    function emptyLitterTray(agent) {
+        console.log('Function call: feed dexter from riverSide function');
+        let response = dailyTasks.emptyLitterTray();
+        agent.add(response);
+    }
+
+    function fallback(agent) {
         agent.add(`I didn't understand`);
         agent.add(`I'm sorry, can you try again?`);
     }
@@ -46,5 +46,6 @@ exports.riverSide = functions.https.onRequest((request, response) => {
     intentMap.set('Default Welcome Intent', welcome);
     intentMap.set('Default Fallback Intent', fallback);
     intentMap.set('Feed Dexter', feedDexter);
+    intentMap.set('Empty Litter Tray', emptyLitterTray);
     agent.handleRequest(intentMap);
 });
