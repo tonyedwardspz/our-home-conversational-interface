@@ -55,10 +55,28 @@ class DailyTasksController {
     }
 
     enptyLitterTray() {
-        return `I've noted that the littler tray has been emptied.`;
+    async enptyLitterTray() {
+        console.info('Emptying the litter tray');
+
+        const litterTrayTask = await todoist.getTask(this.litterTrayID);
+
+        const now = new Date();
+        const litterTrayDate = new Date(litterTrayTask.due.date);
+
+        // check whether its before or after now and mark as done appropriatly
+        if (dateHelper.isToday(litterTrayDate)) {
+            console.info('Litter tray needs emptying today');
+
+            await todoist.setTaskAsComplete(this.litterTrayID).then(() => {
+                console.info('Litter tray has been emptied');
+                return `I've noted that the littler tray has been emptied.`;
+            });
+        } else {
+            console.info('Litter tray does not need emptying right now');
+            return `The litter tray does not need emptying right now.`;
+        }
     }
 
-    feedBirds() {
         return `I've noted that the birds has been fed.`;
     }
 
