@@ -5,9 +5,10 @@ require('dotenv').config();
 const functions = require('firebase-functions');
 const {WebhookClient} = require('dialogflow-fulfillment');
 const dailyTasks = require('./dailyTasks.js');
+const habits = require('./habits.js');
 
 // Deploy versioning
-const version = 0.17
+const version = 0.19
 console.info(`V${version} deploy datetime is ${new Date}`)
 
 process.env.DEBUG = 'dialogflow:debug';
@@ -82,6 +83,35 @@ exports.riverSide = functions.https.onRequest((request, response) => {
         agent.add(response);
     }
 
+    async function somethingStoic() {
+        console.info('Function call: something stoic from riverSide function');
+        let response = await habits.somethingStoic();
+        console.info(response);
+        agent.add(response);
+    }
+
+    async function learnGerman() {
+        console.info('Function call: learn german from riverSide function');
+        let response = await habits.learnGerman();
+        console.info(response);
+        agent.add(response);
+    }
+
+    async function clothesReady() {
+        console.info('Function call: clothes from riverSide function');
+        let response = await habits.clothesReady();
+        console.info(response);
+        agent.add(response);
+    }
+
+    async function onePageOfABook() {
+        console.info('Function call: One page of a book from riverSide function');
+        let response = await habits.onePageOfABook();
+        console.info(response);
+        agent.add(response);
+    }
+
+
     function fallback(agent) {
         agent.add(`I didn't understand`);
         agent.add(`I'm sorry, can you try again?`);
@@ -90,6 +120,8 @@ exports.riverSide = functions.https.onRequest((request, response) => {
     let intentMap = new Map();
     intentMap.set('Default Welcome Intent', welcome);
     intentMap.set('Default Fallback Intent', fallback);
+
+    // Setup daily tasks
     intentMap.set('Feed Dexter', feedDexter);
     intentMap.set('Do Dishes', doDishes);
     intentMap.set('Empty Litter Tray', emptyLitterTray);
@@ -98,5 +130,12 @@ exports.riverSide = functions.https.onRequest((request, response) => {
     intentMap.set('Take Out The Recycling', takeOutRecycling)
     intentMap.set('Make Bed', makeBed);
     intentMap.set('Water House Plants', waterHousePlants);
+
+    // Setup habits
+    intentMap.set('Something Stoic', somethingStoic);
+    intentMap.set('Learn German', learnGerman);
+    intentMap.set('Clothes Ready', clothesReady);
+    intentMap.set('One Page Of A Book', onePageOfABook)
+
     agent.handleRequest(intentMap);
 });
