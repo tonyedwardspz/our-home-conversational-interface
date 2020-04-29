@@ -50,7 +50,7 @@ class DailyTasksController {
         }
     }
 
-    doDishes() {
+    async doDishes() {
         return `I've noted that dishes have been done.`;
     }
 
