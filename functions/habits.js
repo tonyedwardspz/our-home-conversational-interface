@@ -113,5 +113,6 @@ class HabitsController {
             }
         });
     }
-
 }
+
+module.exports = new HabitsController();
