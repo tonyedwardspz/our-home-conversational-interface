@@ -71,37 +71,37 @@ class DailyTasksController extends BaseTaskController {
 
     async doDishes() {
         console.info('Doing the dishes');
-        return super.isTaskTodayOrBefore(this.dishesID, responses.doDishes, 'The dishes need doing today');
+        return super.isTaskTodayOrBefore(this.dishesID, responses.doDishes);
     }
 
     async emptyLitterTray() {
         console.info('Emptying the litter tray');
-        return super.isTaskTodayOrBefore(this.litterTrayID, responses.emptyLitterTray, 'Litter tray needs emptying today');
+        return super.isTaskTodayOrBefore(this.litterTrayID, responses.emptyLitterTray);
     }
 
     async feedBirds() {
         console.info('Feeding the birds');
-        return super.isTaskTodayOrBefore(this.birdsID, responses.feedBirds, 'The birds need feeding today');
+        return super.isTaskTodayOrBefore(this.birdsID, responses.feedBirds);
     }
 
     async takeOutRubbish() {
         console.info('Taking out the rubbish');
-        return super.isTaskTodayOrBefore(this.rubbishID, responses.rubbish, 'The rubbish needs taking out today');
+        return super.isTaskTodayOrBefore(this.rubbishID, responses.rubbish);
     }
 
     async takeOutRecycling() {
         console.info('Taking out the recycling');
-        return super.isTaskTodayOrBefore(this.recyclingID, responses.recycling, 'The recycling needs taking out today');
+        return super.isTaskTodayOrBefore(this.recyclingID, responses.recycling);
     }
 
     async makeBed() {
         console.info('Making the bed');
-        return super.isTaskTodayOrBefore(this.bedIS, responses.makeBed, 'The bed still needs making today');
+        return super.isTaskTodayOrBefore(this.bedIS, responses.makeBed);
     }
 
     async waterHousePlants() {
         console.info('Watering the plants');
-        return super.isTaskTodayOrBefore(this.houseplantsID, responses.waterHousePlants, 'The house plants need watering today');
+        return super.isTaskTodayOrBefore(this.houseplantsID, responses.waterHousePlants);
     }
 }
 

@@ -8,7 +8,7 @@ class BaseTaskController {
         console.info(`Constructor: BaseTaskController instantiated from ${origin}`);
     }
 
-    async isTaskTodayOrBefore(id, responses, message){
+    async isTaskTodayOrBefore(id, responses){
         return new Promise(async (res, rej) => {
 
             try {
@@ -18,7 +18,7 @@ class BaseTaskController {
 
                 const dueDate = new Date(task.due.date)
                 if (dateHelper.isToday(dueDate) || dueDate  < new Date()) {
-                    console.info(message);
+                    console.info(responses.notDoneYet);
     
                     await todoist.setTaskAsComplete(id).then(() => {
                         res(responses.success);

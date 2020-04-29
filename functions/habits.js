@@ -17,22 +17,22 @@ class HabitsController extends BaseTaskController {
 
     async somethingStoic(){
         console.info('Consume something stoic');
-        return super.isTaskTodayOrBefore(this.stocicID, responses.stoic, `Something stoic yet to be consumed`);
+        return super.isTaskTodayOrBefore(this.stocicID, responses.stoic);
     }
 
     async learnGerman(){
         console.info('Learning something German');
-        return super.isTaskTodayOrBefore(this.germanID, responses.learnGerman, `You've not learned anything german yet`);
+        return super.isTaskTodayOrBefore(this.germanID, responses.learnGerman);
     }
 
     async clothesReady(){
         console.info('Getting clothes ready for tomorrow');
-        return super.isTaskTodayOrBefore(this.clothesID, responses.clothesReady, `You've not got your clothes ready yet`);
+        return super.isTaskTodayOrBefore(this.clothesID, responses.clothesReady);
     }
 
     async onePageOfABook(){
         console.info('Reading one page of a book');
-        return super.isTaskTodayOrBefore(this.bookID, responses.onePage, `You've not read a page of a book yet`);
+        return super.isTaskTodayOrBefore(this.bookID, responses.onePage);
     }
 }
 
