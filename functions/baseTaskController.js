@@ -30,7 +30,7 @@ class BaseTaskController {
                     res(responses.notNeeded);
                 }
             } catch(error){
-                rej(responses.failure + ': ' + error).then( () => {
+                rej(responses.failure + ': ' + error).then(() => {
                     return responses.failure;
                 });
             }

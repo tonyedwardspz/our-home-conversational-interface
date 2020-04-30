@@ -9,7 +9,7 @@ const habits = require('./habits.js');
 const regularTasks = require('./regularTasks.js');
 
 // Deploy versioning
-const version = 0.19
+const version = 0.21;
 console.info(`V${version} deploy datetime is ${new Date}`)
 
 process.env.DEBUG = 'dialogflow:debug';
@@ -25,6 +25,11 @@ exports.riverSide = functions.https.onRequest((request, response) => {
 
     const agent = new WebhookClient({ request, response });
 
+    function simpleResponse(response) {
+        console.info(response);
+        agent.add(response);
+    }
+
     function welcome(agent) {
         // agent.add(`V ${version}`);
         agent.add(`You called?`);
@@ -32,114 +37,115 @@ exports.riverSide = functions.https.onRequest((request, response) => {
 
     async function feedDexter() {
         console.info('Function call: feed dexter from riverSide function');
-        let response = await dailyTasks.feedDexter();
-        console.info(response);
-        agent.add(response);
+        await dailyTasks.feedDexter().then(response => {
+            simpleResponse(response);
+        });
     }
 
     async function doDishes() {
         console.info('Function call: doing dishes from riverSide function');
-        let response = await dailyTasks.doDishes();
-        console.info(response);
-        agent.add(response);
+        await dailyTasks.doDishes().then(response => {
+            simpleResponse(response);
+        });
     }
 
     async function emptyLitterTray() {
         console.info('Function call: emptying litter from riverSide function');
-        let response = await dailyTasks.emptyLitterTray();
-        console.info(response);
-        agent.add(response);
+        await dailyTasks.emptyLitterTray().then(response => {
+            simpleResponse(response);
+        });
     }
 
     async function feedBirds(agent) {
         console.info('Function call: feeding birds from riverSide function');
-        let response = await dailyTasks.feedBirds();
-        console.info(response);
-        agent.add(response);
+        await dailyTasks.feedBirds().then(response => {
+            simpleResponse(response);
+        });
     }
 
     async function takeOutRubbish(agent) {
         console.info('Function call: take out rubbish from riverSide function');
-        let response = await dailyTasks.takeOutRubbish();
-        console.info(response);
-        agent.add(response);
+        await dailyTasks.takeOutRubbish().then(response => {
+            simpleResponse(response);
+        });
     }
 
     async function takeOutRecycling(agent) {
         console.info('Function call: take out recycling from riverSide function');
-        let response = await dailyTasks.takeOutRecycling();
-        console.info(response);
-        agent.add(response);
+        await dailyTasks.takeOutRecycling().then(response => {
+            simpleResponse(response);
+        });
     }
 
     async function makeBed() {
         console.info('Function call: making bed from riverSide function');
-        let response = await dailyTasks.makeBed();
-        console.info(response);
-        agent.add(response);
+        await dailyTasks.makeBed().then(response => {
+            simpleResponse(response);
+        });
+        
     }
 
     async function waterHousePlants() {
         console.info('Function call: watering plants from riverSide function');
-        let response = await dailyTasks.waterHousePlants();
-        console.info(response);
-        agent.add(response);
+        await dailyTasks.waterHousePlants().then(response => {
+            simpleResponse(response);
+        });
     }
 
     async function somethingStoic() {
         console.info('Function call: something stoic from riverSide function');
-        let response = await habits.somethingStoic();
-        console.info(response);
-        agent.add(response);
+        await habits.somethingStoic().then(response => {
+            simpleResponse(response);
+        });
     }
 
     async function learnGerman() {
         console.info('Function call: learn german from riverSide function');
-        let response = await habits.learnGerman();
-        console.info(response);
-        agent.add(response);
+        await habits.learnGerman().then(response => {
+            simpleResponse(response);
+        });
     }
 
     async function clothesReady() {
         console.info('Function call: clothes from riverSide function');
-        let response = await habits.clothesReady();
-        console.info(response);
-        agent.add(response);
+        await habits.clothesReady().then(response => {
+            simpleResponse(response);
+        });
     }
 
     async function onePageOfABook() {
         console.info('Function call: One page of a book from riverSide function');
-        let response = await habits.onePageOfABook();
-        console.info(response);
-        agent.add(response);
+        await habits.onePageOfABook().then(response => {
+            simpleResponse(response);
+        });
     }
 
     async function foodWaste() {
         console.info('Function call: Food Waste from riverSide function');
-        let response = await regularTasks.foodWaste();
-        console.info(response);
-        agent.add(response);
+        await regularTasks.foodWaste().then(response => {
+            simpleResponse(response);
+        });
     }
 
     async function dampTraps() {
         console.info('Function call: Damp Traps from riverSide function');
-        let response = await regularTasks.dampTraps();
-        console.info(response);
-        agent.add(response);
+        await regularTasks.dampTraps().then(response => {
+            simpleResponse(response);
+        });
     }
 
     async function greenHouse() {
         console.info('Function call: Green house from riverSide function');
-        let response = await regularTasks.greenHouse();
-        console.info(response);
-        agent.add(response);
+        await regularTasks.greenHouse().then(response => {
+            simpleResponse(response);
+        });
     }
 
     async function meterReadings() {
         console.info('Function call: Meter readings from riverSide function');
-        let response = await regularTasks.meterReadings();
-        console.info(response);
-        agent.add(response);
+        await regularTasks.meterReadings().then(response => {
+            simpleResponse(response);
+        });
     }
 
     function fallback(agent) {

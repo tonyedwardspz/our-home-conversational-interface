@@ -94,7 +94,7 @@ class DailyTasksController extends BaseTaskController {
 
     async makeBed() {
         console.info('Making the bed');
-        return super.isTaskTodayOrBefore(this.bedIS, responses.makeBed);
+        return super.isTaskTodayOrBefore(this.bedID, responses.makeBed);
     }
 
     async waterHousePlants() {
