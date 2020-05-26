@@ -9,7 +9,7 @@ const habits = require('./habits.js');
 const regularTasks = require('./regularTasks.js');
 
 // Deploy versioning
-const version = 0.21;
+const version = 0.22;
 console.info(`V${version} deploy datetime is ${new Date}`)
 
 process.env.DEBUG = 'dialogflow:debug';
@@ -56,21 +56,28 @@ exports.riverSide = functions.https.onRequest((request, response) => {
         });
     }
 
-    async function feedBirds(agent) {
+    async function feedBirds() {
         console.info('Function call: feeding birds from riverSide function');
         await dailyTasks.feedBirds().then(response => {
             simpleResponse(response);
         });
     }
 
-    async function takeOutRubbish(agent) {
+    async function feedFrontBirds() {
+        console.info('Function call: feeding front birds from riverSide function');
+        await dailyTasks.feedFrontBirds().then(response => {
+            simpleResponse(response);
+        });
+    }
+
+    async function takeOutRubbish() {
         console.info('Function call: take out rubbish from riverSide function');
         await dailyTasks.takeOutRubbish().then(response => {
             simpleResponse(response);
         });
     }
 
-    async function takeOutRecycling(agent) {
+    async function takeOutRecycling() {
         console.info('Function call: take out recycling from riverSide function');
         await dailyTasks.takeOutRecycling().then(response => {
             simpleResponse(response);
@@ -148,6 +155,13 @@ exports.riverSide = functions.https.onRequest((request, response) => {
         });
     }
 
+    async function smokeDetectors() {
+        console.info('Function call: Smoke Detectors from riverSide function');
+        await regularTasks.smokeDetectors().then(response => {
+            simpleResponse(response);
+        });
+    }
+
     function fallback(agent) {
         agent.add(`I didn't understand`);
         agent.add(`I'm sorry, can you try again?`);
@@ -162,8 +176,9 @@ exports.riverSide = functions.https.onRequest((request, response) => {
     intentMap.set('Do Dishes', doDishes);
     intentMap.set('Empty Litter Tray', emptyLitterTray);
     intentMap.set('Feed Birds', feedBirds);
+    intentMap.set('Feed Front Birds', feedFrontBirds);
     intentMap.set('Take Out The Rubbish', takeOutRubbish);
-    intentMap.set('Take Out The Recycling', takeOutRecycling)
+    intentMap.set('Take Out The Recycling', takeOutRecycling);
     intentMap.set('Make Bed', makeBed);
     intentMap.set('Water House Plants', waterHousePlants);
 
@@ -171,13 +186,14 @@ exports.riverSide = functions.https.onRequest((request, response) => {
     intentMap.set('Something Stoic', somethingStoic);
     intentMap.set('Learn German', learnGerman);
     intentMap.set('Clothes Ready', clothesReady);
-    intentMap.set('One Page Of A Book', onePageOfABook)
+    intentMap.set('One Page Of A Book', onePageOfABook);
 
     // Regular Tasks
     intentMap.set('Food Waste', foodWaste);    
     intentMap.set('Damp Traps', dampTraps);
     intentMap.set('Green House', greenHouse);
     intentMap.set('Meter Readings', meterReadings);  
+    intentMap.set('Smoke Detectors', smokeDetectors);  
 
     agent.handleRequest(intentMap);
 });

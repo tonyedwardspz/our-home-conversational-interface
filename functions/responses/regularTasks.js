@@ -25,3 +25,10 @@ exports.meterReadings =  {
     notNeeded: `You don't need to do the meter readings today.`,
     failure: 'ERROR submitting the meter readings'
 }
+
+exports.smokeDetectors =  {
+    notDoneYet: `You've not checked the smoke detectors.`,
+    success: `Smoke detectors have been checked.`,
+    notNeeded: `You don't need to check the smoke detectors today.`,
+    failure: 'ERROR checking the smoke detectors'
+}

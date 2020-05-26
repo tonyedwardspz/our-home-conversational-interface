@@ -11,6 +11,7 @@ class RegularTasksController extends BaseTaskController {
         this.dampTrapsID = 3515033861;
         this.greenHouseID = 3386723556;
         this.meterReadingsID = 3851055740;
+        this.smokeDetectorsID = 3860064155;
     }
 
     async foodWaste(){
@@ -31,6 +32,11 @@ class RegularTasksController extends BaseTaskController {
     async meterReadings(){
         console.info('Submitting the meter readings');
         return super.isTaskTodayOrBefore(this.meterReadingsID, responses.meterReadings);
+    }
+
+    async smokeDetectors(){
+        console.info('Checking the smoke detectors');
+        return super.isTaskTodayOrBefore(this.smokeDetectorsID, responses.smokeDetectors);
     }
 }
 

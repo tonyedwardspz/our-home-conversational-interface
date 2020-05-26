@@ -14,6 +14,7 @@ class DailyTasksController extends BaseTaskController {
         this.dishesID = 3441528837;
         this.litterTrayID = 3413457465;
         this.birdsID = 3386738503;
+        this.frontBirdsID = 3860100995;
         this.rubbishID = 3386702538;
         this.recyclingID = 3447640080;
         this.bedID = 3441526986;
@@ -80,6 +81,11 @@ class DailyTasksController extends BaseTaskController {
     async feedBirds() {
         console.info('Feeding the birds');
         return super.isTaskTodayOrBefore(this.birdsID, responses.feedBirds);
+    }
+
+    async feedFrontBirds() {
+        console.info('Feeding the birds out the front');
+        return super.isTaskTodayOrBefore(this.frontBirdsID, responses.feedFrontBirds);
     }
 
     async takeOutRubbish() {
